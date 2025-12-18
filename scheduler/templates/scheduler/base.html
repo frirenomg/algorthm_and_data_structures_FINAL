@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Task Scheduler{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'sheduler/css/main.css' %}">
+</head>
+<body>
+
+<header>
+    <h1>🧠 Task Scheduler & Algorithms</h1>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<script src="{% static 'sheduler/js/main.js' %}"></script>
+</body>
+</html>
