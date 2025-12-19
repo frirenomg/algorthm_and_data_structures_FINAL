@@ -1,4 +1,8 @@
-def insertion_sort(tasks):
+def sort_by_priority(tasks):
+    """
+    Сортировка задач по priority (по возрастанию или убыванию — выбери по требованию)
+    """
+    tasks = tasks.copy()
     for i in range(1, len(tasks)):
         key = tasks[i]
         j = i - 1

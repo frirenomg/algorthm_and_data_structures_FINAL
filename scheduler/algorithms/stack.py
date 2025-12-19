@@ -6,4 +6,9 @@ class Stack:
         self.data.append(item)
 
     def pop(self):
-        return self.data.pop() if self.data else None
+        if self.data:
+            return self.data.pop()
+        return None
+
+    def is_empty(self):
+        return len(self.data) == 0

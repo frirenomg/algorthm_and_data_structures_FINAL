@@ -1,6 +1,9 @@
 import heapq
 
 def dijkstra(graph, start):
+    if start not in graph:
+        return {}
+
     dist = {v: float('inf') for v in graph}
     dist[start] = 0
     pq = [(0, start)]

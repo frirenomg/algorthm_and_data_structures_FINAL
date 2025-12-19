@@ -1,3 +1,5 @@
+from collections import deque
+
 class TaskGraph:
     def __init__(self):
         self.graph = {}
@@ -7,6 +9,8 @@ class TaskGraph:
             self.graph[task_id] = []
 
     def add_dependency(self, task, depends_on):
+        if depends_on not in self.graph:
+            self.graph[depends_on] = []
         self.graph[depends_on].append(task)
 
     def dfs(self, start, visited=None):
@@ -18,17 +22,15 @@ class TaskGraph:
                 self.dfs(neighbour, visited)
         return visited
 
-from collections import deque
+    def bfs(self, start):
+        visited = set()
+        queue = deque([start])
+        visited.add(start)
 
-def bfs(self, start):
-    visited = set()
-    queue = deque([start])
-    visited.add(start)
-
-    while queue:
-        node = queue.popleft()
-        for n in self.graph.get(node, []):
-            if n not in visited:
-                visited.add(n)
-                queue.append(n)
-    return visited
+        while queue:
+            node = queue.popleft()
+            for n in self.graph.get(node, []):
+                if n not in visited:
+                    visited.add(n)
+                    queue.append(n)
+        return visited

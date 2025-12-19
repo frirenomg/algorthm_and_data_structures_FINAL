@@ -1,16 +1,14 @@
-from collections import deque
-
 class TaskQueue:
     def __init__(self):
-        self.queue = deque()
+        self.data = []
 
     def add_task(self, task):
-        self.queue.append(task)
+        self.data.append(task)
 
     def get_next(self):
-        if self.queue:
-            return self.queue.popleft()
+        if self.data:
+            return self.data.pop(0)
         return None
 
     def is_empty(self):
-        return len(self.queue) == 0
+        return len(self.data) == 0
