@@ -4,6 +4,11 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
 
+    # CRUD задачи
+    path('task/edit/<int:task_id>/', views.edit_task, name='edit_task'),
+    path('task/delete/<int:task_id>/', views.delete_task, name='delete_task'),
+
+    # Алгоритмы
     path('avl/', views.run_avl, name='avl'),
     path('bst/', views.run_bst, name='bst'),
     path('dijkstra/', views.run_dijkstra, name='dijkstra'),
@@ -20,4 +25,5 @@ urlpatterns = [
     path('searching/', views.run_searching, name='searching'),
     path('sorting/', views.run_sorting, name='sorting'),
     path('stack/', views.run_stack, name='stack'),
+    path('tasks/reset/', views.reset_all_tasks, name='reset_all_tasks'),
 ]

@@ -5,10 +5,28 @@
 </head>
 <body>
     <h1>Task Scheduler</h1>
+
+    <h2>Add New Task</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" name="add_task">Add Task</button>
+    </form>
+
+    <!-- Кнопка сброса статусов всех задач -->
+    <form action="{% url 'reset_all_tasks' %}" method="post" style="margin-top: 10px;">
+        {% csrf_token %}
+        <button type="submit">Reset All Tasks to Waiting</button>
+    </form>
+
     <h2>Tasks</h2>
     <ul>
         {% for task in tasks %}
-            <li>{{ task.name }} (Priority: {{ task.priority }}, Execution Time: {{ task.execution_time }})</li>
+            <li>
+                {{ task.name }} (Priority: {{ task.priority }}, Execution Time: {{ task.execution_time }}, Status: {{ task.status }})
+                [<a href="{% url 'edit_task' task.id %}">Edit</a>]
+                [<a href="{% url 'delete_task' task.id %}">Delete</a>]
+            </li>
         {% endfor %}
     </ul>
 

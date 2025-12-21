@@ -1,5 +1,3 @@
-# scheduler/algorithms/hash_table.py
-
 class TaskHashTable:
     def __init__(self):
         self.table = {}

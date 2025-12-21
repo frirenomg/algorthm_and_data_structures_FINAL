@@ -7,7 +7,6 @@ class PriorityTaskQueue:
         self.counter = count()
 
     def add_task(self, task):
-        # Используем отрицательный приоритет для max-heap
         heapq.heappush(self.heap, (-task.priority, next(self.counter), task))
 
     def get_next(self):

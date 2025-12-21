@@ -1,6 +1,7 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Task
+from .forms import TaskForm
 
 # Импортируем модули алгоритмов целиком
 from .algorithms import (
@@ -22,13 +23,44 @@ from .algorithms import (
     graph
 )
 
-
+# ---------- TASK LIST + ADD ----------
 def index(request):
     tasks = Task.objects.all()
-    return render(request, 'scheduler/index.html', {'tasks': tasks})
 
+    # Форма добавления новой задачи
+    if request.method == 'POST' and 'add_task' in request.POST:
+        form = TaskForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = TaskForm()
 
-# ---------- AVL TREE ----------
+    return render(request, 'scheduler/index.html', {'tasks': tasks, 'form': form})
+
+# ---------- EDIT TASK ----------
+def edit_task(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    if request.method == 'POST':
+        form = TaskForm(request.POST, instance=task)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = TaskForm(instance=task)
+    return render(request, 'scheduler/edit_task.html', {'form': form, 'task': task})
+
+def reset_all_tasks(request):
+    Task.objects.all().update(status='waiting')
+    return redirect('index')
+
+# ---------- DELETE TASK ----------
+def delete_task(request, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    task.delete()
+    return redirect('index')
+
+# ---------- ALGORITHMS ----------
 def run_avl(request):
     tasks = list(Task.objects.all())
     root = None
@@ -46,8 +78,6 @@ def run_avl(request):
     inorder(root)
     return JsonResponse({"avl": result})
 
-
-# ---------- BST ----------
 def run_bst(request):
     tasks = list(Task.objects.all())
     tree = bst.BST()
@@ -66,8 +96,6 @@ def run_bst(request):
     inorder(root)
     return JsonResponse({"bst": result})
 
-
-# ---------- DIJKSTRA ----------
 def run_dijkstra(request):
     tasks = list(Task.objects.all())
     graph_dict = {task.name: [] for task in tasks}
@@ -78,12 +106,9 @@ def run_dijkstra(request):
     start_task = tasks[0].name if tasks else None
     if not start_task:
         return JsonResponse({"dijkstra": {}})
-    # вызываем функцию через модуль
     distances = dijkstra.dijkstra(graph_dict, start_task)
     return JsonResponse({"dijkstra": distances})
 
-
-# ---------- TASK GRAPH ----------
 def run_graph(request):
     tasks = list(Task.objects.all())
     g = graph.TaskGraph()
@@ -98,22 +123,16 @@ def run_graph(request):
     bfs_result = g.bfs(start_task)
     return JsonResponse({"graph_dfs": list(dfs_result), "graph_bfs": list(bfs_result)})
 
-
-# ---------- DP SCHEDULER ----------
 def run_dp_scheduler(request):
     tasks = list(Task.objects.all())
     result = dp_scheduler.schedule_dp(tasks, max_time=10)
     return JsonResponse({"dp_scheduler": result})
 
-
-# ---------- GREEDY ----------
 def run_greedy(request):
     tasks = list(Task.objects.filter(status='waiting'))
     task = greedy.greedy_next_task(tasks)
     return JsonResponse({"greedy": task.name if task else None})
 
-
-# ---------- HASH TABLE ----------
 def run_hash_table(request):
     table = hash_table.TaskHashTable()
     tasks = list(Task.objects.all())
@@ -121,15 +140,11 @@ def run_hash_table(request):
         table.insert(task.name, task)
     return JsonResponse({"hash_table": list(table.keys())})
 
-
-# ---------- HEAP SORT ----------
 def run_heap_sort(request):
     tasks = list(Task.objects.all())
     sorted_tasks = heap_sort.heap_sort_tasks(tasks)
     return JsonResponse({"heap_sort": [t.name for t in sorted_tasks]})
 
-
-# ---------- LINKED LIST ----------
 def run_linked_list(request):
     tasks = list(Task.objects.all())
     ll = linked_list.SinglyLinkedList()
@@ -137,8 +152,6 @@ def run_linked_list(request):
         ll.add(task.name)
     return JsonResponse({"linked_list": ll.to_list()})
 
-
-# ---------- PRIORITY QUEUE ----------
 def run_priority_queue(request):
     pq = priority_queue.PriorityTaskQueue()
     tasks = Task.objects.filter(status='waiting')
@@ -151,8 +164,6 @@ def run_priority_queue(request):
             result.append(task.name)
     return JsonResponse({"priority_queue": result})
 
-
-# ---------- QUEUES ----------
 def run_queues(request):
     q = queues.TaskQueue()
     tasks = list(Task.objects.all())
@@ -165,15 +176,11 @@ def run_queues(request):
             result.append(task.name)
     return JsonResponse({"queues": result})
 
-
-# ---------- QUICK SORT ----------
 def run_quick_sort(request):
     tasks = list(Task.objects.all())
     sorted_tasks = quick_sort.quick_sort(tasks)
     return JsonResponse({"quick_sort": [t.name for t in sorted_tasks]})
 
-
-# ---------- ROUND ROBIN ----------
 def run_round_robin(request):
     scheduler = round_robin.RoundRobinScheduler(quantum=3)
     tasks = Task.objects.filter(status='waiting')
@@ -182,23 +189,16 @@ def run_round_robin(request):
     result = scheduler.run()
     return JsonResponse({"round_robin": result})
 
-
-# ---------- SEARCHING ----------
 def run_searching(request):
     tasks = list(Task.objects.all())
-    # вызываем через модуль, если функция есть
     found = getattr(searching, "find_max_priority", lambda x: None)(tasks)
     return JsonResponse({"searching": found.name if found else None})
 
-
-# ---------- SORTING ----------
 def run_sorting(request):
     tasks = list(Task.objects.all())
     sorted_tasks = sorting.sort_by_priority(tasks)
     return JsonResponse({"sorting": [t.name for t in sorted_tasks]})
 
-
-# ---------- STACK ----------
 def run_stack(request):
     s = stack.Stack()
     tasks = list(Task.objects.all())
