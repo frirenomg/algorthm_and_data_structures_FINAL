@@ -46,20 +46,16 @@ def insert(root, key, task):
     root.height = 1 + max(h(root.left), h(root.right))
     b = balance(root)
 
-    # Left Left
     if b > 1 and root.left and key < root.left.key:
         return rotate_right(root)
 
-    # Right Right
     if b < -1 and root.right and key > root.right.key:
         return rotate_left(root)
 
-    # Left Right
     if b > 1 and root.left and key > root.left.key:
         root.left = rotate_left(root.left)
         return rotate_right(root)
 
-    # Right Left
     if b < -1 and root.right and key < root.right.key:
         root.right = rotate_right(root.right)
         return rotate_left(root)

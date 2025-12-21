@@ -4,26 +4,20 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
 
-    # Основные алгоритмы
-    path('priority/', views.run_priority, name='priority'),
-    path('round-robin/', views.run_round_robin, name='round_robin'),
-    path('heap-sort/', views.run_heap_sort, name='heap_sort'),
-    path('quick-sort/', views.run_quick_sort, name='quick_sort'),
-    path('sorting/', views.run_sorting, name='sorting'),
-
-    # Деревья
     path('avl/', views.run_avl, name='avl'),
     path('bst/', views.run_bst, name='bst'),
-
-    # Планирование
-    path('greedy/', views.run_greedy, name='greedy'),
+    path('dijkstra/', views.run_dijkstra, name='dijkstra'),
     path('dp-scheduler/', views.run_dp_scheduler, name='dp_scheduler'),
-
-    # Структуры данных
-    path('queue/', views.run_queue, name='queue'),
-    path('stack/', views.run_stack, name='stack'),
+    path('graph/', views.run_graph, name='graph'),
+    path('greedy/', views.run_greedy, name='greedy'),
     path('hash-table/', views.run_hash_table, name='hash_table'),
-
-    # Поиск
+    path('heap-sort/', views.run_heap_sort, name='heap_sort'),
+    path('linked-list/', views.run_linked_list, name='linked_list'),
+    path('priority-queue/', views.run_priority_queue, name='priority_queue'),
+    path('queues/', views.run_queues, name='queues'),
+    path('quick-sort/', views.run_quick_sort, name='quick_sort'),
+    path('round-robin/', views.run_round_robin, name='round_robin'),
     path('searching/', views.run_searching, name='searching'),
+    path('sorting/', views.run_sorting, name='sorting'),
+    path('stack/', views.run_stack, name='stack'),
 ]

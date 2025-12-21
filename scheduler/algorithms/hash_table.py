@@ -1,4 +1,6 @@
-class HashTable:
+# scheduler/algorithms/hash_table.py
+
+class TaskHashTable:
     def __init__(self):
         self.table = {}
 
@@ -7,3 +9,6 @@ class HashTable:
 
     def search(self, key):
         return self.table.get(key)
+
+    def keys(self):
+        return list(self.table.keys())
